@@ -158,14 +158,14 @@ object statement {
     case object CloseOnCompletion extends StatementOp[Unit] {
       def defaultTransK[M[_]: Monad: Catchable: Capture] = primitive(_.closeOnCompletion())
     }
-    case class  Execute(a: String) extends StatementOp[Boolean] {
-      def defaultTransK[M[_]: Monad: Catchable: Capture] = primitive(_.execute(a))
+    case class  Execute(a: String, b: Int) extends StatementOp[Boolean] {
+      def defaultTransK[M[_]: Monad: Catchable: Capture] = primitive(_.execute(a, b))
     }
     case class  Execute1(a: String, b: Array[Int]) extends StatementOp[Boolean] {
       def defaultTransK[M[_]: Monad: Catchable: Capture] = primitive(_.execute(a, b))
     }
-    case class  Execute2(a: String, b: Int) extends StatementOp[Boolean] {
-      def defaultTransK[M[_]: Monad: Catchable: Capture] = primitive(_.execute(a, b))
+    case class  Execute2(a: String) extends StatementOp[Boolean] {
+      def defaultTransK[M[_]: Monad: Catchable: Capture] = primitive(_.execute(a))
     }
     case class  Execute3(a: String, b: Array[String]) extends StatementOp[Boolean] {
       def defaultTransK[M[_]: Monad: Catchable: Capture] = primitive(_.execute(a, b))
@@ -176,13 +176,13 @@ object statement {
     case class  ExecuteQuery(a: String) extends StatementOp[ResultSet] {
       def defaultTransK[M[_]: Monad: Catchable: Capture] = primitive(_.executeQuery(a))
     }
-    case class  ExecuteUpdate(a: String, b: Array[String]) extends StatementOp[Int] {
+    case class  ExecuteUpdate(a: String, b: Int) extends StatementOp[Int] {
       def defaultTransK[M[_]: Monad: Catchable: Capture] = primitive(_.executeUpdate(a, b))
     }
-    case class  ExecuteUpdate1(a: String, b: Int) extends StatementOp[Int] {
+    case class  ExecuteUpdate1(a: String, b: Array[Int]) extends StatementOp[Int] {
       def defaultTransK[M[_]: Monad: Catchable: Capture] = primitive(_.executeUpdate(a, b))
     }
-    case class  ExecuteUpdate2(a: String, b: Array[Int]) extends StatementOp[Int] {
+    case class  ExecuteUpdate2(a: String, b: Array[String]) extends StatementOp[Int] {
       def defaultTransK[M[_]: Monad: Catchable: Capture] = primitive(_.executeUpdate(a, b))
     }
     case class  ExecuteUpdate3(a: String) extends StatementOp[Int] {
@@ -206,11 +206,11 @@ object statement {
     case object GetMaxRows extends StatementOp[Int] {
       def defaultTransK[M[_]: Monad: Catchable: Capture] = primitive(_.getMaxRows())
     }
-    case object GetMoreResults extends StatementOp[Boolean] {
-      def defaultTransK[M[_]: Monad: Catchable: Capture] = primitive(_.getMoreResults())
-    }
-    case class  GetMoreResults1(a: Int) extends StatementOp[Boolean] {
+    case class  GetMoreResults(a: Int) extends StatementOp[Boolean] {
       def defaultTransK[M[_]: Monad: Catchable: Capture] = primitive(_.getMoreResults(a))
+    }
+    case object GetMoreResults1 extends StatementOp[Boolean] {
+      def defaultTransK[M[_]: Monad: Catchable: Capture] = primitive(_.getMoreResults())
     }
     case object GetQueryTimeout extends StatementOp[Int] {
       def defaultTransK[M[_]: Monad: Catchable: Capture] = primitive(_.getQueryTimeout())
@@ -447,8 +447,8 @@ object statement {
   /** 
    * @group Constructors (Primitives)
    */
-  def execute(a: String): StatementIO[Boolean] =
-    F.liftFC(Execute(a))
+  def execute(a: String, b: Int): StatementIO[Boolean] =
+    F.liftFC(Execute(a, b))
 
   /** 
    * @group Constructors (Primitives)
@@ -459,8 +459,8 @@ object statement {
   /** 
    * @group Constructors (Primitives)
    */
-  def execute(a: String, b: Int): StatementIO[Boolean] =
-    F.liftFC(Execute2(a, b))
+  def execute(a: String): StatementIO[Boolean] =
+    F.liftFC(Execute2(a))
 
   /** 
    * @group Constructors (Primitives)
@@ -483,19 +483,19 @@ object statement {
   /** 
    * @group Constructors (Primitives)
    */
-  def executeUpdate(a: String, b: Array[String]): StatementIO[Int] =
+  def executeUpdate(a: String, b: Int): StatementIO[Int] =
     F.liftFC(ExecuteUpdate(a, b))
 
   /** 
    * @group Constructors (Primitives)
    */
-  def executeUpdate(a: String, b: Int): StatementIO[Int] =
+  def executeUpdate(a: String, b: Array[Int]): StatementIO[Int] =
     F.liftFC(ExecuteUpdate1(a, b))
 
   /** 
    * @group Constructors (Primitives)
    */
-  def executeUpdate(a: String, b: Array[Int]): StatementIO[Int] =
+  def executeUpdate(a: String, b: Array[String]): StatementIO[Int] =
     F.liftFC(ExecuteUpdate2(a, b))
 
   /** 
@@ -543,14 +543,14 @@ object statement {
   /** 
    * @group Constructors (Primitives)
    */
-  val getMoreResults: StatementIO[Boolean] =
-    F.liftFC(GetMoreResults)
+  def getMoreResults(a: Int): StatementIO[Boolean] =
+    F.liftFC(GetMoreResults(a))
 
   /** 
    * @group Constructors (Primitives)
    */
-  def getMoreResults(a: Int): StatementIO[Boolean] =
-    F.liftFC(GetMoreResults1(a))
+  val getMoreResults: StatementIO[Boolean] =
+    F.liftFC(GetMoreResults1)
 
   /** 
    * @group Constructors (Primitives)
